@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace WorkoutPlanner.Domain
 {
-    public class Class1
+    public class User
     {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        
     }
 }
