@@ -10,8 +10,12 @@ namespace WorkoutPlanner.App.Controllers
     {
         public ActionResult Index()
         {
-            ViewBag.Title = "Home Page";
+            //ViewBag.Title = "Home Page";
+            return View();
+        }
 
+        public ActionResult Track()
+        {
             return View();
         }
     }
