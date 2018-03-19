@@ -15,15 +15,21 @@
 <h3>Track Tool</h3>
 <br />
 <div id="map"></div>
+<div id="routeInfo">
+    @Html.Label("N/A", new { id = "meters" }) Kilometers
+</div>
 <div id="mapControls">
     <button onclick="Undo()">Undo Marker</button>
+
     @using (Html.BeginForm("SaveTrack", "Home", FormMethod.Post))
     {
         <fieldset>
             <legend>New Track</legend>
             <label>Track Name</label>
             @Html.TextBox("name")
-            <span id="hidden_values"></span>
+            <br />
+            <span id="hidden_locationValues"></span>
+            <span id="hidden_distanceValues"></span>
             <input type="submit" value="Save Track">
         </fieldset>
     }
@@ -33,7 +39,8 @@
     var markers = [];
     var map;
     var directionsDisplay;
-    var directionsService
+    var directionsService;
+    var routeDistance;
     function initMap() {
 
         directionsDisplay = new google.maps.DirectionsRenderer;
@@ -52,7 +59,6 @@
             if (markers.length > 1) {
                 CalculateRoute();
                 AttachLocationsToForm();
-                
             }
         });
 
@@ -74,9 +80,17 @@
         directionsService.route(request, function (result, status) {
             if (status = "OK") {
                 directionsDisplay.setDirections(result);
+                routeDistance = 0;
+                result.routes[0].legs.forEach(l => routeDistance += l.distance.value);
+                DisplayDistance(routeDistance);
+                AttachDistanceToForm(routeDistance);
             }
 
         });
+    }
+
+    function DisplayDistance(value) {
+        document.getElementById('meters').textContent = value / 1000;
     }
 
     function Undo() {
@@ -84,9 +98,22 @@
         CalculateRoute();
     }
 
+    function AttachDistanceToForm(distanceValue) {
+        var hiddenNode = document.getElementById('hidden_distanceValues');
+        while (hiddenNode.firstChild) {
+            hiddenNode.removeChild(hiddenNode.firstChild);
+        }
+        var meters = document.createElement("INPUT");
+        meters.setAttribute("type", "hidden");
+        meters.setAttribute("name", "Meters");
+        meters.setAttribute("value", distanceValue);
+
+        document.getElementById('hidden_distanceValues').appendChild(meters);
+    }
+
     function AttachLocationsToForm() {
 
-        var hiddenNode = document.getElementById('hidden_values');
+        var hiddenNode = document.getElementById('hidden_locationValues');
         while (hiddenNode.firstChild) {
             hiddenNode.removeChild(hiddenNode.firstChild);
         }
@@ -103,10 +130,9 @@
             latitude.setAttribute("name", latitudeElementName);
             latitude.setAttribute("value", markers[i].getPosition().lng());
 
-            document.getElementById('hidden_values').appendChild(longitude);
-            document.getElementById('hidden_values').appendChild(latitude);
+            document.getElementById('hidden_locationValues').appendChild(longitude);
+            document.getElementById('hidden_locationValues').appendChild(latitude);
         }
-
     }
 </script>
 

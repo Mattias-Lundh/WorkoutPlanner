@@ -5,6 +5,8 @@ using System.Web;
 using System.Web.Mvc;
 using WorkoutPlanner.Data;
 using WorkoutPlanner.Domain.Models;
+using System.ComponentModel.DataAnnotations;
+using WorkoutPlanner.App.Models;
 
 namespace WorkoutPlanner.App.Controllers
 {
@@ -18,13 +20,23 @@ namespace WorkoutPlanner.App.Controllers
 
         public ActionResult Track()
         {
-            return View();
+            return View(new TrackVM());
         }
 
         [HttpPost]
         public ActionResult SaveTrack(Track track, List<Location> locations)
         {
-            return Redirect("Track");
+            if (ModelState.IsValid)
+            {
+                track.Locations = locations;
+                Database db = new Database();
+                db.AddTrack(track);
+                ViewBag.Message = "Track '" + track.Name + "' Saved";
+                return Redirect("Track");
+            }
+
+            TrackVM model = new TrackVM { TrackNameError = "Track needs a name" };
+            return Redirect("Track"); // need to add the model here
         }
 
         [HttpPost]
