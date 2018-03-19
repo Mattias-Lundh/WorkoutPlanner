@@ -12,30 +12,36 @@
     }
 </style>
 
-
-@*<input name="connStr" type="hidden" value="@Environment.GetEnvironmentVariable("SQLAZURECONNSTR_WorkoutPlanner")">*@
-
 <h3>Track Tool</h3>
 <br />
 <div id="map"></div>
 <div id="mapControls">
-    <button onclick="UndoMarker()">Undo Marker</button>
-    <input type="text" id="mapName" value="Map Name" />
-    <button onclick="SaveTrack()">Save Track</button>
+    <button onclick="Undo()">Undo Marker</button>
+    @using (Html.BeginForm("SaveTrack", "Home", FormMethod.Post))
+    {
+        <fieldset>
+            <legend>New Track</legend>
+            <label>Track Name</label>
+            @Html.TextBox("name")
+            <span id="hidden_values"></span>
+            <input type="submit" value="Save Track">
+        </fieldset>
+    }
 </div>
 
 <script>
     var markers = [];
     var map;
-
+    var directionsDisplay;
+    var directionsService
     function initMap() {
-        var directionsDisplay = new google.maps.DirectionsRenderer;
-        var directionsService = new google.maps.DirectionsService;
 
-        var uluru = { lat: 57.7089, lng: 11.9746 };
+        directionsDisplay = new google.maps.DirectionsRenderer;
+        directionsService = new google.maps.DirectionsService;
+        var mapViewLocation = { lat: 57.7089, lng: 11.9746 }; //Göteborg
         map = new google.maps.Map(document.getElementById('map'), {
             zoom: 10,
-            center: uluru
+            center: mapViewLocation
         });
         directionsDisplay.setMap(map);
         map.addListener('click', function (e) {
@@ -44,28 +50,27 @@
                 map: map
             }));
             if (markers.length > 1) {
+                CalculateRoute();
+                AttachLocationsToForm();
                 
-                CalculateRoute(directionsDisplay, directionsService);
             }
         });
 
     }
 
-
-
-
-    function CalculateRoute(directionsDisplay, directionsService) {
+    function CalculateRoute() {
         var allWaypoints = [];
         for (var i = 1; i <= markers.length - 2; i++) {
-            allWaypoints.push(markers[i].position);
+            allWaypoints.push({ location: markers[i].position });
         }
-        alert("start:" + markers[0].position + " end: " + markers[markers.length - 1].position + " mid:" + allWaypoints + " markersCount:" + markers.length);
+
         var request = {
             origin: markers[0].position,
             destination: markers[markers.length - 1].position,
             waypoints: allWaypoints,
             travelMode: 'WALKING'
         };
+
         directionsService.route(request, function (result, status) {
             if (status = "OK") {
                 directionsDisplay.setDirections(result);
@@ -74,11 +79,33 @@
         });
     }
 
-    function UndoMarker() {
+    function Undo() {
         markers.pop().setMap();
+        CalculateRoute();
     }
 
-    function SaveTrack() {
+    function AttachLocationsToForm() {
+
+        var hiddenNode = document.getElementById('hidden_values');
+        while (hiddenNode.firstChild) {
+            hiddenNode.removeChild(hiddenNode.firstChild);
+        }
+
+        for (var i = 0; i < markers.length; i++) {
+            var longitudeElementName = '[' + i + '].longitude';
+            var longitude = document.createElement("INPUT");
+            longitude.setAttribute("type", "hidden");
+            longitude.setAttribute("name", longitudeElementName);
+            longitude.setAttribute("value", markers[i].getPosition().lat());
+            var latitudeElementName = '[' + i + '].latitude';
+            var latitude = document.createElement("INPUT");
+            latitude.setAttribute("type", "hidden");
+            latitude.setAttribute("name", latitudeElementName);
+            latitude.setAttribute("value", markers[i].getPosition().lng());
+
+            document.getElementById('hidden_values').appendChild(longitude);
+            document.getElementById('hidden_values').appendChild(latitude);
+        }
 
     }
 </script>

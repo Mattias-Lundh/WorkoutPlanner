@@ -12,7 +12,7 @@ namespace WorkoutPlanner.Data
     {
         private WorkoutPlannerContext context;
 
-        Database()
+        public Database()
         {
             context = new WorkoutPlannerContext();
         }

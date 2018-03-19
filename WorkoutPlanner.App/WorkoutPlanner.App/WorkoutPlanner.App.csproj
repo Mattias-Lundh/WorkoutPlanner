@@ -242,6 +242,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Models\" />
+    <Folder Include="Views\Track\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
@@ -257,6 +258,10 @@
     <Content Include="Scripts\jquery-1.10.2.min.map" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\WorkoutPlanner.Data\WorkoutPlanner.Data.csproj">
+      <Project>{acaa0100-a3eb-49a6-b371-23a856191a06}</Project>
+      <Name>WorkoutPlanner.Data</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WorkoutPlanner.Domain\WorkoutPlanner.Domain.csproj">
       <Project>{a65d64c3-a988-4b38-a57e-0904b6e6766e}</Project>
       <Name>WorkoutPlanner.Domain</Name>

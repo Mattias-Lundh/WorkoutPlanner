@@ -5,3 +5,8 @@
 }
 
 <h2>Welcome to Workout planner</h2>
+@using (Html.BeginForm("DbConnect", "Home", FormMethod.Post, new { @id = "conn" })){
+    <input name="connStr" type="hidden" value="@Environment.GetEnvironmentVariable("SQLAZURECONNSTR_WorkoutPlanner")" />
+    <input type="submit" value="DBConnect">
+}
+
