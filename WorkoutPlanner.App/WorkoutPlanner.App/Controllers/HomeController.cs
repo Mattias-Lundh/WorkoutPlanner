@@ -7,12 +7,12 @@ using WorkoutPlanner.Data;
 using WorkoutPlanner.Domain.Models;
 using System.ComponentModel.DataAnnotations;
 using WorkoutPlanner.App.Models;
+using WorkoutPlanner.Domain.API;
 
 namespace WorkoutPlanner.App.Controllers
 {
     public class HomeController : Controller
     {
-        private string dbKey = "";
         public ActionResult Index()
         {
             return View();
@@ -23,27 +23,35 @@ namespace WorkoutPlanner.App.Controllers
             return View(new TrackVM());
         }
 
+        public ActionResult SearchTrack(string searchString)
+        {
+            Database db = new Database();
+            TrackVM model = new TrackVM();
+            try
+            {
+                model.TrackSearchResult = db.GetTracksByNameSearch(searchString);
+            }
+            catch (NullReferenceException)
+            {
+
+            }
+            return View("Track", model);
+        }
+
         [HttpPost]
         public ActionResult SaveTrack(Track track, List<Location> locations)
         {
-            if (ModelState.IsValid)
+            if (ModelState.IsValid && null != Session["UserId"])
             {
-                track.Locations = locations;
                 Database db = new Database();
+                track.Creator = (int)Session["UserId"];
+                track.Locations = locations;
                 db.AddTrack(track);
                 ViewBag.Message = "Track '" + track.Name + "' Saved";
                 return Redirect("Track");
             }
 
-            TrackVM model = new TrackVM { TrackNameError = "Track needs a name" };
-            return Redirect("Track"); // need to add the model here
-        }
-
-        [HttpPost]
-        public ActionResult DbConnect(string connStr)
-        {
-            dbKey = connStr;
-            return Redirect("Index");
+            return Redirect("Track");
         }
     }
 }

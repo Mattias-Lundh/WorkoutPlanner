@@ -11,9 +11,10 @@ using WorkoutPlanner.Data;
 namespace WorkoutPlanner.Data.Migrations
 {
     [DbContext(typeof(WorkoutPlannerContext))]
-    partial class WorkoutPlannerContextModelSnapshot : ModelSnapshot
+    [Migration("20180321134644_UniqeUserEmail")]
+    partial class UniqeUserEmail
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -37,7 +38,7 @@ namespace WorkoutPlanner.Data.Migrations
 
                     b.HasIndex("TrackId");
 
-                    b.ToTable("Comments");
+                    b.ToTable("Comment");
                 });
 
             modelBuilder.Entity("WorkoutPlanner.Domain.Models.Location", b =>
@@ -58,32 +59,12 @@ namespace WorkoutPlanner.Data.Migrations
                     b.ToTable("Locations");
                 });
 
-            modelBuilder.Entity("WorkoutPlanner.Domain.Models.Session", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<DateTime>("Date");
-
-                    b.Property<int>("TrackId");
-
-                    b.Property<int>("UserId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("TrackId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Sessions");
-                });
-
             modelBuilder.Entity("WorkoutPlanner.Domain.Models.Track", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int>("Creator");
+                    b.Property<int?>("CreatorId");
 
                     b.Property<int>("Meters");
 
@@ -91,6 +72,8 @@ namespace WorkoutPlanner.Data.Migrations
                         .IsRequired();
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CreatorId");
 
                     b.ToTable("Tracks");
                 });
@@ -159,17 +142,11 @@ namespace WorkoutPlanner.Data.Migrations
                         .HasForeignKey("TrackId");
                 });
 
-            modelBuilder.Entity("WorkoutPlanner.Domain.Models.Session", b =>
+            modelBuilder.Entity("WorkoutPlanner.Domain.Models.Track", b =>
                 {
-                    b.HasOne("WorkoutPlanner.Domain.Models.Track", "Track")
+                    b.HasOne("WorkoutPlanner.Domain.Models.User", "Creator")
                         .WithMany()
-                        .HasForeignKey("TrackId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("WorkoutPlanner.Domain.Models.User", "User")
-                        .WithMany("Sessions")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("CreatorId");
                 });
 
             modelBuilder.Entity("WorkoutPlanner.Domain.Models.Workout", b =>

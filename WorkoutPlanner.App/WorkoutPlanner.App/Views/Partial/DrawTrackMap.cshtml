@@ -1,22 +1,9 @@
-﻿
-<style>
-    #map {
-        height: 400px;
-        width: 80%;
-    }
-
-    #mapControls {
-        height: 400px;
-        width: 20%;
-        margin: 0 auto;
-    }
-</style>
-
-<h3>Track Tool</h3>
+﻿<h3>Draw A Track</h3>
 <br />
 <div id="map"></div>
+
 <div id="routeInfo">
-    @Html.Label("N/A", new { id = "meters" }) Kilometers
+    @Html.Label("0", new { id = "meters" }) Kilometers
 </div>
 <div id="mapControls">
     <button onclick="Undo()">Undo Marker</button>
@@ -50,18 +37,22 @@
             zoom: 10,
             center: mapViewLocation
         });
+
         directionsDisplay.setMap(map);
         map.addListener('click', function (e) {
-            markers.push(new google.maps.Marker({
-                position: e.latLng,
-                map: map
-            }));
-            if (markers.length > 1) {
-                CalculateRoute();
-                AttachLocationsToForm();
-            }
+            CreateMarker(e.latLng);
         });
+    }
 
+    function CreateMarker(latLng) {
+        markers.push(new google.maps.Marker({
+            position: latLng,
+            map: map
+        }));
+        if (markers.length > 1) {
+            CalculateRoute();
+            AttachLocationsToForm();
+        }
     }
 
     function CalculateRoute() {
@@ -85,7 +76,6 @@
                 DisplayDistance(routeDistance);
                 AttachDistanceToForm(routeDistance);
             }
-
         });
     }
 

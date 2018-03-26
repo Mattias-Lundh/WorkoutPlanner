@@ -1,16 +1,69 @@
-﻿
+﻿@using WorkoutPlanner.Domain.Models;
+@model WorkoutPlanner.App.Models.TrackVM
 @{
     ViewBag.Title = "Track";
 }
+<style>
+    #map {
+        height: 400px;
+        width: 80%;
+    }
 
-<h2>Track</h2>
-<br/>
-<div>
-    @ViewBag.Message
+    #mapControls {
+        height: 400px;
+        width: 20%;
+        margin: 0 auto;
+    }
+</style>
+
+@using (Html.BeginForm("SearchTrack", "Home", FormMethod.Get))
+{
+    @Html.Label("", "Find Track: ");
+    @Html.TextBox("searchString", "");
+    <br />
+    <input type="submit" value="GO">
+}
+
+<div id="track_display">
+    @if (Model.TrackSearchResult.Count != 0)
+    {
+        <script>
+            var tracks = [];
+            var trackNames = [];
+            var locations = [];
+    @foreach(Track track in Model.TrackSearchResult)
+    {
+        @: locations = [];
+
+            foreach (Location location in track.Locations)
+        {
+             @:locations.push({ lat: @location.Latitude, lng: @location.Longitude});
+        }
+        @:tracks.push(locations);
+        @:trackNames.push("@track.Name");
+
+    }
+            function test() {
+                alert('test successful');
+            }
+        </script>
+        <div>
+            <button onclick="test()">TEST</button>
+            @Html.Partial(@"../Partial/DisplayTrackMap")
+        </div>
+
+    }
+    else
+    {
+
+        <div>
+            @Html.Partial(@"../Partial/DrawTrackMap")
+        </div>
+    }
 </div>
 
-<br />
 
-<div>
-    @Html.Partial(@"../Partial/Map");
-</div>
+
+
+
+

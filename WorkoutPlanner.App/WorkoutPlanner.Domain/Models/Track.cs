@@ -11,10 +11,11 @@ namespace WorkoutPlanner.Domain.Models
     {
         public int Id { get; set; }
         [Required]
-        public string Name { get; set; } //not part of init migration
+        public string Name { get; set; }
         public List<Location> Locations { get; set; }
-        public int Meters { get; set; } //not part of init migration
-        public User Creator { get; set; } //not part of init migration
-        public List<Comment> Comments { get; set; } //not part of init migration
+        [Required]
+        public int Meters { get; set; }
+        public int Creator { get; set; }
+        public List<Comment> Comments { get; set; }
     }
 }

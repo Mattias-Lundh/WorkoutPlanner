@@ -11,9 +11,10 @@ using WorkoutPlanner.Data;
 namespace WorkoutPlanner.Data.Migrations
 {
     [DbContext(typeof(WorkoutPlannerContext))]
-    partial class WorkoutPlannerContextModelSnapshot : ModelSnapshot
+    [Migration("20180322134104_TrackCreatorIsNowInt")]
+    partial class TrackCreatorIsNowInt
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -37,7 +38,7 @@ namespace WorkoutPlanner.Data.Migrations
 
                     b.HasIndex("TrackId");
 
-                    b.ToTable("Comments");
+                    b.ToTable("Comment");
                 });
 
             modelBuilder.Entity("WorkoutPlanner.Domain.Models.Location", b =>
@@ -56,26 +57,6 @@ namespace WorkoutPlanner.Data.Migrations
                     b.HasIndex("TrackId");
 
                     b.ToTable("Locations");
-                });
-
-            modelBuilder.Entity("WorkoutPlanner.Domain.Models.Session", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<DateTime>("Date");
-
-                    b.Property<int>("TrackId");
-
-                    b.Property<int>("UserId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("TrackId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Sessions");
                 });
 
             modelBuilder.Entity("WorkoutPlanner.Domain.Models.Track", b =>
@@ -157,19 +138,6 @@ namespace WorkoutPlanner.Data.Migrations
                     b.HasOne("WorkoutPlanner.Domain.Models.Track")
                         .WithMany("Locations")
                         .HasForeignKey("TrackId");
-                });
-
-            modelBuilder.Entity("WorkoutPlanner.Domain.Models.Session", b =>
-                {
-                    b.HasOne("WorkoutPlanner.Domain.Models.Track", "Track")
-                        .WithMany()
-                        .HasForeignKey("TrackId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("WorkoutPlanner.Domain.Models.User", "User")
-                        .WithMany("Sessions")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("WorkoutPlanner.Domain.Models.Workout", b =>

@@ -1,0 +1,21 @@
+﻿
+<h2>@ViewBag.Heading</h2>
+
+
+@using (Html.BeginForm("Login", "Account", FormMethod.Post))
+{
+    <fieldset>
+        @Html.Label("e-mail: ")
+        @Html.TextBox("email", "")
+        <br />
+        @Html.Label("password: ")
+        @Html.Password("password", "")
+        <br />
+        <input type="submit" value="Log In" />
+    </fieldset>
+    <br />
+    <div>
+        @Html.ActionLink("Register new user", "Register")
+    </div>
+}
+

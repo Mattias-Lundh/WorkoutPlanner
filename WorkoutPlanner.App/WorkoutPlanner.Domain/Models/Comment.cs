@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WorkoutPlanner.Domain.Models
 {
-    public class Comment //not part of initial migration
+    public class Comment
     {
         public int Id { get; set; }
         public string Text { get; set; }

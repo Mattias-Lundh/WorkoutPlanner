@@ -1,0 +1,100 @@
+﻿<div id="track_choice">
+</div>
+    <h3 id="heading">Track View: select a track</h3>
+    <br />
+    <div id="map"></div>
+
+    <script>
+        var markers = [];
+        var map;
+        var directionsDisplay;
+        var directionsService;
+
+        function initMap() {
+            directionsDisplay = new google.maps.DirectionsRenderer;
+            directionsService = new google.maps.DirectionsService;
+            var mapViewLocation = { lat: 57.7089, lng: 11.9746 }; //Göteborg
+            map = new google.maps.Map(document.getElementById('map'), {
+                zoom: 10,
+                center: mapViewLocation
+            });
+            directionsService = new google.maps.DirectionsService;
+            google.maps.event.addDomListener(document.getElementByClassName('btn_track'), 'click', function (evt) {
+                alert('hej');
+                //var marker = new google.maps.Marker({
+                //    position: {
+                //        lat: parseFloat(document.getElementById('lat').value),
+                //        lng: parseFloat(document.getElementById('lng').value)
+                //    },
+                //    map: map
+                //});
+            });
+        }
+
+        google.maps.event.addDomListener(window, 'load', initMap);
+
+        function DisplayRoute(headingText, locations) {
+            SetHeading(headingText);
+            CreateMarkers(locations);
+            CalculateRoute(locations);
+        }
+
+        function CreateMarkers(latLngs) {
+            for (var i = 0; i < latLngs.length; i++) {
+                CreateMarker(latLngs[i]);
+            }
+        }
+
+        function CreateMarker(latLng) {
+            markers.push(new google.maps.Marker({
+                position: latLng,
+                map: map
+            }));
+        }
+
+        function CalculateRoute(markers) {
+            var allWaypoints = [];
+            for (var i = 1; i <= markers.length - 2; i++) {
+                allWaypoints.push({ location: markers[i].position });
+            }
+
+            var request = {
+                origin: markers[0].position,
+                destination: markers[markers.length - 1].position,
+                waypoints: allWaypoints,
+                travelMode: 'WALKING'
+            };
+
+            directionsService.route(request, function (result, status) {
+                if (status = "OK") {
+                    directionsDisplay.setDirections(result);
+                }
+            });
+        }
+
+        function SetHeading(text) {
+            document.getElementById("heading").textContent = text;
+        }
+
+        function CreateLatLngItem(lat, lng) {
+            return new { lat: lat, lng: lng };
+        }
+
+        function InsertButton(trackname, trackLocations) {
+            var btn = document.createElement("BUTTON");
+            //btn.onclick = function () { DisplayRoute("Track View: " + trackname, trackLocations) };
+            btn.setAttribute("class", "btn_track");
+            btn.textContent = trackname;
+            document.getElementById('track_choice').appendChild(btn);
+        }
+
+        window.onload = function () {
+            for (var i = 0; i < tracks.length; i++) {
+                InsertButton(trackNames[i], tracks[i]);                
+            }
+        }
+
+    </script>
+
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBxAKqjyu48QPczRxf_XznZ82hLGukWZH0&callback=initMap"
+            type="text/javascript"></script>
