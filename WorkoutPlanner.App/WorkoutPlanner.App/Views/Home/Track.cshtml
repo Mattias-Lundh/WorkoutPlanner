@@ -16,6 +16,7 @@
     }
 </style>
 
+<h2>Track Search</h2>
 @using (Html.BeginForm("SearchTrack", "Home", FormMethod.Get))
 {
     @Html.Label("", "Find Track: ");
@@ -34,7 +35,6 @@
     @foreach(Track track in Model.TrackSearchResult)
     {
         @: locations = [];
-
             foreach (Location location in track.Locations)
         {
              @:locations.push({ lat: @location.Latitude, lng: @location.Longitude});
@@ -51,19 +51,11 @@
             <button onclick="test()">TEST</button>
             @Html.Partial(@"../Partial/DisplayTrackMap")
         </div>
-
     }
     else
     {
-
         <div>
             @Html.Partial(@"../Partial/DrawTrackMap")
         </div>
     }
 </div>
-
-
-
-
-
-

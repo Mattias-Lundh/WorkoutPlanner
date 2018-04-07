@@ -1,11 +1,10 @@
 ﻿@{
-
     ViewBag.Title = "Index";
 }
 <h2>Welcome to Workout planner</h2>
 
 @using (Html.BeginForm("Index", "Account", FormMethod.Get))
 {
-    <input type="hidden" name="returnUrl" value="Home">
+    <input type="hidden" name="returnUrl" value="Home" />
     <input type="submit" value="Log In" />
 }

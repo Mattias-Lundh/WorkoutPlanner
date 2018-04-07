@@ -18,10 +18,13 @@ namespace WorkoutPlanner.Data
         public DbSet<Workout> Workouts { get; set; }
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Session> Sessions { get; set; }
+        public DbSet<Achievement> Achievements { get; set; }
+        public DbSet<UserAchievement> UserAchievements { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<User>().HasIndex(m => m.Email).IsUnique();
+            modelBuilder.Entity<UserAchievement>().HasKey(ua => new { ua.AchievementId, ua.UserId });
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

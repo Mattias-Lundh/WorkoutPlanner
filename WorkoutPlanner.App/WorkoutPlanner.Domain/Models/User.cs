@@ -18,6 +18,7 @@ namespace WorkoutPlanner.Domain.Models
         public string Password { get; set; } 
         public string Salt { get; set; } 
         public List<Workout> Workouts { get; set; }
-        public List<Session> Sessions { get; set; } // new property
+        public List<Session> Sessions { get; set; }
+        public List<UserAchievement> UserAchievements { get; set; }
     }
 }

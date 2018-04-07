@@ -21,7 +21,11 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("Home", "Index", "Home", new { area = "" }, null)</li>
+                    <li>@Html.ActionLink("Schedule", "Schedule", "Home", new { area = "" }, null)</li>
                     <li>@Html.ActionLink("Track", "Track", "Home", new { area = "" }, null)</li>
+                    <li>@Html.ActionLink("Workout", "Workout", "Home", new { area = "" }, null)</li>
+                    <li>@Html.ActionLink("Achievements", "Achievements", "Home", new { area = "" }, null)</li>
+                    <li>@Html.ActionLink("Admin", "Index", "Admin", new { area = "" }, null)</li>
                 </ul>
                 <div style="text-align:right;color:lightblue">@Session["Email"]</div>
             </div>

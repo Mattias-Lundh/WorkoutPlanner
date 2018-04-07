@@ -127,6 +127,10 @@
     <Compile Include="Migrations\20180323085505_Session.designer.cs">
       <DependentUpon>20180323085505_Session.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\20180406085944_Achievements.cs" />
+    <Compile Include="Migrations\20180406085944_Achievements.designer.cs">
+      <DependentUpon>20180406085944_Achievements.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\WorkoutPlannerContextModelSnapshot.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WorkoutPlannerContext.cs" />

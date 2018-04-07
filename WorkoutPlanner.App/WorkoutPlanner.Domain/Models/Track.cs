@@ -15,6 +15,7 @@ namespace WorkoutPlanner.Domain.Models
         public List<Location> Locations { get; set; }
         [Required]
         public int Meters { get; set; }
+        [Required]
         public int Creator { get; set; }
         public List<Comment> Comments { get; set; }
     }

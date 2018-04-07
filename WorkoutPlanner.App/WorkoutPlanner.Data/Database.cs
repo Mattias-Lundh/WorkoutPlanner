@@ -48,7 +48,7 @@ namespace WorkoutPlanner.Data
             }
         }
 
-        public List<Track> GetTrackByUserId(int userId)
+        public List<Track> GetWorkoutTracksByUserId(int userId)
         {
             List<Track> result = new List<Track>();
             using (WorkoutPlannerContext context = new WorkoutPlannerContext())
@@ -62,6 +62,17 @@ namespace WorkoutPlanner.Data
                 users.ForEach(u => u.Workouts.ForEach(w => result.Add(w.Track)));
             }
             return result;
+        }
+
+        public List<Track> GetTrackByCreator(int creator)
+        {
+            using (WorkoutPlannerContext context = new WorkoutPlannerContext())
+            {
+                var tracks = context.Tracks
+                    .Where(t => t.Creator == creator).ToList();
+
+                return tracks;
+            }
         }
         #endregion
 
@@ -115,6 +126,131 @@ namespace WorkoutPlanner.Data
             }
 
             return result;
+        }
+        #endregion
+
+        #region Workout
+        public void AddWorkout(Workout workout)
+        {
+            using (WorkoutPlannerContext context = new WorkoutPlannerContext())
+            {
+                context.Workouts.Add(workout);
+                context.SaveChanges();
+            }
+        }
+
+        public List<Workout> GetWorkoutsByUserId(int userId)
+        {
+            List<Workout> result = new List<Workout>();
+            using (WorkoutPlannerContext context = new WorkoutPlannerContext())
+            {
+                var user = context.Users
+                    .Where(u => u.Id == userId)
+                    .Include(u => u.Workouts)
+                        .ThenInclude(w => w.Track)
+                    .FirstOrDefault();
+                user.Workouts.ForEach(w => result.Add(w));
+            }
+            return result;
+        }
+        #endregion
+
+        #region Achievement
+        public List<Achievement> GetAllAchievements()
+        {
+            using (WorkoutPlannerContext context = new WorkoutPlannerContext())
+            {
+                return context.Achievements.ToList();
+            }
+        }
+
+        public List<Achievement> GetAchievementsByUserId(int userId)
+        {
+            using (WorkoutPlannerContext context = new WorkoutPlannerContext())
+            {
+                List<Achievement> result = new List<Achievement>();
+                User user = context.Users
+                    .Where(u => u.Id == userId)
+                    .Include(u => u.UserAchievements)
+                        .ThenInclude(ua => ua.Achievement)
+                    .FirstOrDefault();
+
+                user.UserAchievements.ForEach(ua => result.Add(ua.Achievement));
+                return result;
+            }
+        }
+
+        public List<Achievement> GetAllAccomplishmentAchievementsByQualification(int distanceQualification)
+        {
+            using (WorkoutPlannerContext context = new WorkoutPlannerContext())
+            {
+                return context.Achievements
+                    .Where(a => a.Type == "Accomplishment" && a.Value < distanceQualification)
+                    .ToList();
+            }
+        }
+
+        public List<Achievement> GetAllDistanceAchievementsByQualification(int distanceQualification)
+        {
+            using (WorkoutPlannerContext context = new WorkoutPlannerContext())
+            {
+                return context.Achievements
+                    .Where(a => a.Type == "Distance" && a.Value < distanceQualification)
+                    .ToList();
+            }
+        }
+
+        public List<Achievement> GetAllDurationAchievementsByQualification(int durationQualification)
+        {
+            using (WorkoutPlannerContext context = new WorkoutPlannerContext())
+            {
+                return context.Achievements
+                    .Where(a => a.Type == "Duration" && a.Value < durationQualification)
+                    .ToList();
+            }
+        }
+
+        public void AddAchievement(Achievement achievement)
+        {
+            using (WorkoutPlannerContext context = new WorkoutPlannerContext())
+            {
+                context.Achievements.Add(achievement);
+                context.SaveChanges();
+            }
+        }
+        #endregion
+
+        #region UserAchievement
+        public void AddUserAchievement(UserAchievement userAchievement)
+        {
+            using (WorkoutPlannerContext context = new WorkoutPlannerContext())
+            {
+                context.UserAchievements.Add(userAchievement);
+                context.SaveChanges();
+            }
+        }
+
+        public List<UserAchievement> GetUserAchievementsForUser(int userId)
+        {
+            using (WorkoutPlannerContext context = new WorkoutPlannerContext())
+            {
+                return context.UserAchievements
+                    .Where(ua => ua.UserId == userId)
+                    .ToList();
+            }
+        }
+        #endregion
+
+        #region Session
+        public List<Session> GetSessionsByUserId(int userId)
+        {
+            using (WorkoutPlannerContext context = new WorkoutPlannerContext())
+            {
+                return context.Sessions
+                    .Where(s => s.UserId == userId)
+                    .Include(s => s.Track)
+                    .ToList();
+            }
         }
         #endregion
     }

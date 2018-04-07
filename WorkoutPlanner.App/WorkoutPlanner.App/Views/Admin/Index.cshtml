@@ -1,0 +1,32 @@
+﻿@using WorkoutPlanner.Domain.Models
+@model WorkoutPlanner.App.Models.AchievementVM
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+@using (Html.BeginForm("AddAchievement", "Admin", FormMethod.Post))
+{
+    @Html.Label("", "Type: ")
+    @Html.TextBox("Type", "")
+    <br />
+    @Html.Label("", "Description: ")
+    @Html.TextBox("Description", "")
+    <br />
+    @Html.Label("", "Value: ")
+    @Html.TextBox("Value", "")
+    <br />
+    <input type="submit" value="Add Achievement" />
+}
+
+<br />
+<br />
+<div>AVALIABLE ACHIEVEMENTS</div>
+<br />
+<ul>
+    @foreach (var achievement in Model.Achievements)
+    {
+        <li><b>Type:</b> @achievement.Type <b>Description:</b> @achievement.Description</li>
+    }
+</ul>

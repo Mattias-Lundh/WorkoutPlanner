@@ -1,0 +1,145 @@
+﻿@using WorkoutPlanner.Domain.Models;
+@model WorkoutPlanner.App.Models.WorkoutVM
+
+@{
+    ViewBag.Title = "Workout";
+}
+
+<h2>Workout</h2>
+
+<button onclick="DisplayWorkout()">View Workouts</button>
+<br />
+<button onclick="RegisterWorkout()">Register Workout</button>
+<br />
+<h3 id="box_heading"></h3>
+<br />
+<div id="display_box">
+
+</div>
+
+<script>
+    function RegisterWorkout() {
+        SetHeading("Register new Workout");
+        ClearNode('display_box');
+        var form = BuildWorkoutForm();
+        LoadElement(form);
+    }
+
+    function DisplayWorkout() {
+        SetHeading("Workout History");
+        var workoutDisplayElement = BuildWorkoutDisplayElement();
+        ClearNode('display_box');
+        LoadElement(workoutDisplayElement);
+    }
+
+    function ClearNode(elementId) {
+        var node = document.getElementById(elementId);
+        while (node.firstChild) {
+            node.removeChild(node.firstChild);
+        }
+    }
+
+    function LoadElement(element) {
+        document.getElementById('display_box').appendChild(element);
+    }
+
+    function SetHeading(text) {
+        document.getElementById('box_heading').textContent = text;
+    }
+
+    function BuildWorkoutDisplayElement() {
+        var list = document.createElement("ul");
+        var listitem;
+        @if(null != Model.Workouts)
+        {
+            foreach (var Workout in Model.Workouts)
+            {
+                    @:listitem = document.createElement("li");
+                    @:listitem.textContent = "Date: @Workout.Date.ToString("yyyy-MM-dd") Track: @Workout.Track.Name Distance: @Workout.Track.Meters Time: @Workout.Minutes min";
+                    @:list.appendChild(listitem);
+            }
+        }
+
+        return list;
+    }
+
+    function BuildWorkoutForm() {
+        var lineBreak1 = document.createElement("br");
+        var lineBreak2 = document.createElement("br");
+        var lineBreak3 = document.createElement("br");
+        var result = document.createElement("FORM");
+        result.setAttribute("method", "post");
+        result.setAttribute("action", "SaveWorkout");
+
+        var lbl_date = document.createElement("LABEL");
+        lbl_date.textContent = "Date: ";
+        lbl_date.setAttribute("for", "date");
+        result.appendChild(lbl_date);
+        var date = document.createElement("INPUT");
+        date.setAttribute("type", "date");
+        date.setAttribute("id", "date");
+        date.setAttribute("name", "date");
+        result.appendChild(date);
+        result.appendChild(lineBreak1);
+
+
+        //var lbl_h = document.createElement("LABEL");
+        //lbl_h.textContent = "h: ";
+        //lbl_h.setAttribute("for", "duration_h");
+        //result.appendChild(lbl_h);
+        //var durationh = document.createElement("INPUT");
+        //durationh.setAttribute("type", "number");
+        //durationh.setAttribute("min", "0");
+        //durationh.setAttribute("id","duration_h")
+        //result.appendChild(durationh);
+
+        var lbl_m = document.createElement("LABEL");
+        lbl_m.textContent = "minutes :";
+        lbl_m.setAttribute("for", "duration_m");
+        result.appendChild(lbl_m);
+        var durationm = document.createElement("INPUT");
+        durationm.setAttribute("type", "number");
+        durationm.setAttribute("min", "0");
+        durationm.setAttribute("id", "duration_m");
+        durationm.setAttribute("name", "minutes");
+        result.appendChild(durationm);
+
+        //var lbl_s = document.createElement("LABEL");
+        //lbl_s.textContent = "s: ";
+        //lbl_s.setAttribute("for", "duration_s");
+        //result.appendChild(lbl_s);
+        //var durations = document.createElement("INPUT");
+        //durations.setAttribute("type", "number");
+        //durations.setAttribute("min", "0");
+        //durations.setAttribute("id", "duration_s")
+        //result.appendChild(durations);
+
+        result.appendChild(lineBreak2);
+        var lbl_track = document.createElement("LABEL");
+        lbl_track.textContent = "Track: ";
+        lbl_track.setAttribute("for", "track");
+        result.appendChild(lbl_track);
+
+        var tracks = document.createElement("SELECT");
+        tracks.setAttribute("id", "track");
+        tracks.setAttribute("name", "trackName");
+        @if(null != Model.AllTracks) { 
+            foreach (Track track in Model.AllTracks)
+            {
+                @:var track = document.createElement("OPTION");
+                    @:track.setAttribute("value", "@track.Name");
+                    @:track.textContent = "@track.Name";
+                    @:tracks.appendChild(track);
+            }
+        }
+        result.appendChild(tracks);
+        result.appendChild(lineBreak3);
+
+        var submit = document.createElement("INPUT");
+        submit.setAttribute("type", "submit");
+        submit.setAttribute("value", "Save Workout");
+        result.appendChild(submit);
+
+        return result;
+    }
+</script>

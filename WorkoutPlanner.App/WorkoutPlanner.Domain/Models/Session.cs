@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WorkoutPlanner.Domain.Models
 {
-    public class Session //new class
+    public class Session
     {
         public int Id { get; set; }
         public DateTime Date { get; set; }

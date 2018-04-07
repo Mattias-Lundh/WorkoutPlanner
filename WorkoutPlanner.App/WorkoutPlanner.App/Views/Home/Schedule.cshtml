@@ -1,0 +1,27 @@
+﻿@using WorkoutPlanner.Domain.Models;
+@model WorkoutPlanner.App.Models.ScheduleVM
+@{
+    ViewBag.Title = "Schedule";
+}
+
+<h2>Schedule</h2>
+<br />
+<h3>Plan Schedule</h3>
+@using (Html.BeginForm("SaveSession", "Home", FormMethod.Post))
+{
+    <div>Date: </div>
+    <input type="date" name="date"/>
+    <br />
+    <div>Track: </div>
+    @:<input type="submit" value="Save Session" />
+}
+<h3 id="dispaly">Planned Activities</h3>
+
+<script>
+    window.onload = function () {
+        @if (null != Session["Username"])
+        {
+            @:document.getElementById("dispaly").textContent = "@Session["Username"]'s Planned Activities";
+        }
+    }
+</script>

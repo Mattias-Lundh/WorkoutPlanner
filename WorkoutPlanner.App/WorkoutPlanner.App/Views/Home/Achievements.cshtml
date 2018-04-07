@@ -1,0 +1,16 @@
+﻿@using WorkoutPlanner.Domain.Models;
+@model WorkoutPlanner.App.Models.AchievementVM
+@{
+    ViewBag.Title = "Achievements";
+}
+
+<h2>Achievements</h2>
+@if (null != Model.Achievements)
+{
+<ul>
+    @foreach (var achievement in Model.Achievements)
+    {
+        <li><b>Type:</b> @achievement.Type <b>Description:</b> @achievement.Description</li>
+    }
+</ul>
+}
