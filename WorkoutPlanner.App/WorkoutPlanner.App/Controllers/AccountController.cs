@@ -26,7 +26,7 @@ namespace WorkoutPlanner.App.Controllers
             Security security = new Security();
             Database db = new Database();
             User user = db.GetUserByEmail(email);
-            if (security.ComparePassword(user.Password, password, user.Salt))
+            if (null != user && security.ComparePassword(user.Password, password, user.Salt))
             {
                 Session["UserId"] = user.Id;
                 Session["Email"] = user.Email;

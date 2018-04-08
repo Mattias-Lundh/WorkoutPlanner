@@ -11,9 +11,10 @@ using WorkoutPlanner.Data;
 namespace WorkoutPlanner.Data.Migrations
 {
     [DbContext(typeof(WorkoutPlannerContext))]
-    partial class WorkoutPlannerContextModelSnapshot : ModelSnapshot
+    [Migration("20180408080728_Commentsmodification")]
+    partial class Commentsmodification
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -29,11 +29,23 @@ namespace WorkoutPlanner.Data
             }
         }
 
+        public Track GetTrackById(int trackId)
+        {
+            using (WorkoutPlannerContext context = new WorkoutPlannerContext())
+            {
+                return context.Tracks.Find(trackId);                    
+            }
+        }
+
         public Track GetTrackByNameSearch(string searchStr)
         {
             using (WorkoutPlannerContext context = new WorkoutPlannerContext())
             {
-                return context.Tracks.Where(t => t.Name.Contains(searchStr)).FirstOrDefault();
+                return context.Tracks
+                    .Where(t => t.Name.Contains(searchStr))
+                    .Include(t=>t.Locations)
+                    .Include(t=>t.Comments)
+                    .FirstOrDefault();
             }
         }
 
@@ -42,7 +54,8 @@ namespace WorkoutPlanner.Data
             using (WorkoutPlannerContext context = new WorkoutPlannerContext())
             {
                 return context.Tracks
-                    .Where(t => t.Name.Contains(searchStr))
+                    .Where(t => t.Name.StartsWith(searchStr))
+                    .Include(t => t.Comments)
                     .Include(t => t.Locations)
                     .ToList();
             }
@@ -242,6 +255,15 @@ namespace WorkoutPlanner.Data
         #endregion
 
         #region Session
+        public void AddSession(Session session)
+        {
+            using (WorkoutPlannerContext context = new WorkoutPlannerContext())
+            {
+                context.Sessions.Add(session);
+                context.SaveChanges();
+            }
+        }
+
         public List<Session> GetSessionsByUserId(int userId)
         {
             using (WorkoutPlannerContext context = new WorkoutPlannerContext())
@@ -250,6 +272,17 @@ namespace WorkoutPlanner.Data
                     .Where(s => s.UserId == userId)
                     .Include(s => s.Track)
                     .ToList();
+            }
+        }
+        #endregion
+
+        #region Comments
+        public void AddComment(Comment comment)
+        {
+            using (WorkoutPlannerContext context = new WorkoutPlannerContext())
+            {
+                context.Comments.Add(comment);
+                context.SaveChanges();
             }
         }
         #endregion

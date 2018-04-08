@@ -29,7 +29,10 @@ namespace WorkoutPlanner.App.Controllers
             TrackVM model = new TrackVM();
             try
             {
-                model.TrackSearchResult = db.GetTracksByNameSearch(searchString);
+                if ("" != searchString)
+                {
+                    model.TrackSearchResult = db.GetTracksByNameSearch(searchString);
+                }
             }
             catch (NullReferenceException)
             {
@@ -49,6 +52,19 @@ namespace WorkoutPlanner.App.Controllers
                 db.AddTrack(track);
                 ViewBag.Message = "Track '" + track.Name + "' Saved";
                 return Redirect("Track");
+            }
+            return Redirect("Track");
+        }
+
+        [HttpPost]
+        public ActionResult SaveTrackComment(string trackName, string text)
+        {
+            if (null != Session["UserId"] && null != text)
+            {
+                Database db = new Database();
+                Track track = db.GetTrackByNameSearch(trackName);
+                Comment comment = new Comment { AuthorId = (int)Session["UserId"], TrackId = track.Id, Text = text };
+                db.AddComment(comment);
             }
             return Redirect("Track");
         }
@@ -95,19 +111,30 @@ namespace WorkoutPlanner.App.Controllers
             return View(model);
         }
 
-        public ActionResult Schedule()
+        public ActionResult Schedule(int? trackId = null)
         {
             ScheduleVM model = new ScheduleVM();
             if (null != Session["UserId"])
             {
-                Database db = new Database();                
+                Database db = new Database();
+                if (null != trackId)
+                {
+                    model.Selectedtrack = db.GetTrackById((int)trackId);
+                }
                 model.ScheduleItems = db.GetSessionsByUserId((int)Session["UserId"]);
+                model.UserTracks = db.GetTrackByCreator((int)Session["userId"]);
             }
             return View(model);
         }
 
-        public ActionResult SaveSession()
+        public ActionResult SaveSession(Session session)
         {
+            if (null != Session["UserId"])
+            {
+                session.UserId = (int)Session["UserId"];
+                Database db = new Database();
+                db.AddSession(session);
+            }
             return Redirect("Schedule");
         }
     }

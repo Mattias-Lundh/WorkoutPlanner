@@ -6,16 +6,27 @@
 
 <h2>Schedule</h2>
 <br />
-<h3>Plan Schedule</h3>
+<h3>Make new Plan</h3>
 @using (Html.BeginForm("SaveSession", "Home", FormMethod.Post))
 {
     <div>Date: </div>
     <input type="date" name="date"/>
     <br />
     <div>Track: </div>
+    <select name="trackId">
+        @foreach (var track in Model.AllTracks)
+        {
+            <option value="@track.Id">@track.Name</option>
+        }
+    </select>
     @:<input type="submit" value="Save Session" />
 }
 <h3 id="dispaly">Planned Activities</h3>
+
+@foreach (var session in Model.ScheduleItems)
+{
+    <div><b>Date:</b> @session.Date.ToString("yyyy-MM-dd") <b>Track:</b> @session.Track.Name <b>Distance:</b> @Math.Truncate((decimal)session.Track.Meters / 1000) KM</div>
+}
 
 <script>
     window.onload = function () {

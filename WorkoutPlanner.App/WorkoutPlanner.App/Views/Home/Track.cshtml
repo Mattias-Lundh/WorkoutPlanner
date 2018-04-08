@@ -28,12 +28,43 @@
 <div id="track_display">
     @if (Model.TrackSearchResult.Count != 0)
     {
-        <script>
+    <script>
             var tracks = [];
+            var locations = [];
+            var comments = [];
+            @foreach(Track track in Model.TrackSearchResult)
+            {
+                @: locations = [];
+                @: comments = [];
+                foreach (Location location in track.Locations)
+                {
+                    @:locations.push({ lat: @location.Latitude, lng: @location.Longitude});
+                }
+                foreach (var Comment in track.Comments)
+                {
+                    @:comments.push("@Comment.Text");
+                }
+                @:tracks.push({ "locations": locations, "name": "@track.Name", "comments": comments });
+            }
+
+
+
+
+
+
+
+
+
+
+
+            @*var tracks = [];
             var trackNames = [];
+            var trackComments = [];
+            var commentsForSpecificTrack = [];
             var locations = [];
     @foreach(Track track in Model.TrackSearchResult)
     {
+        @:commentsForSpecificTrack = [];
         @: locations = [];
             foreach (Location location in track.Locations)
         {
@@ -41,12 +72,16 @@
         }
         @:tracks.push(locations);
         @:trackNames.push("@track.Name");
-
-    }
+            foreach (var Comment in track.Comments)
+        {
+            @:commentsForSpecificTrack.push(@Comment.Text);
+        }
+        @:trackComments.push(commentsForSpecificTrack);
+    }*@
             function test() {
                 alert('test successful');
             }
-        </script>
+    </script>
         <div>
             <button onclick="test()">TEST</button>
             @Html.Partial(@"../Partial/DisplayTrackMap")
