@@ -50,17 +50,48 @@
     function BuildWorkoutDisplayElement() {
         var list = document.createElement("ul");
         var listitem;
+        var editForm;
+        var div;
         @if(null != Model.Workouts)
         {
             foreach (var Workout in Model.Workouts)
             {
-                    @:listitem = document.createElement("li");
-                    @:listitem.textContent = "Date: @Workout.Date.ToString("yyyy-MM-dd") Track: @Workout.Track.Name Distance: @Workout.Track.Meters Time: @Workout.Minutes min";
-                    @:list.appendChild(listitem);
+                @:editForm = GetEditFormForWorkoutDuration(@Workout.Id);
+                @:listitem = document.createElement("li");
+                @:div = document.createElement("DIV");
+                @:div.textContent = "Date: @Workout.Date.ToString("yyyy-MM-dd") Track: @Workout.Track.Name Distance: @Workout.Track.Meters Time: @Workout.Minutes min";
+                @:listitem.appendChild(div);
+                @:listitem.appendChild(editForm);
+                @:list.appendChild(listitem);
             }
         }
 
         return list;
+    }
+
+    function GetEditFormForWorkoutDuration(workoutId) {
+        
+        var form = document.createElement("FORM");
+        form.setAttribute("method", "post");
+        form.setAttribute("action", "EditWorkoutDuration");
+
+        var input = document.createElement("INPUT");
+        input.setAttribute("type", "textbox");
+        input.setAttribute("name", "Minutes");
+
+        var id = document.createElement("INPUT");
+        id.setAttribute("value", workoutId);
+        id.setAttribute("type", "hidden");
+        id.setAttribute("name", "Id");
+
+        var submit = document.createElement("INPUT");
+        submit.setAttribute("type", "submit");
+        submit.setAttribute("value", "Update Time");
+
+        form.appendChild(input);
+        form.appendChild(submit);
+        form.appendChild(id);
+        return form;
     }
 
     function BuildWorkoutForm() {
@@ -123,7 +154,7 @@
         var tracks = document.createElement("SELECT");
         tracks.setAttribute("id", "track");
         tracks.setAttribute("name", "trackName");
-        @if(null != Model.AllTracks) { 
+        @if(null != Model.AllTracks) {
             foreach (Track track in Model.AllTracks)
             {
                 @:var track = document.createElement("OPTION");

@@ -10,8 +10,8 @@ namespace WorkoutPlanner.App.Models
     {
         public AchievementVM()
         {
-            Achievements = new List<Achievement>();
+            Achievements = new List<object>();
         }
-        public List<Achievement> Achievements { get; set; }
+        public List<object> Achievements { get; set; }        
     }
 }

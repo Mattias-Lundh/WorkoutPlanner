@@ -186,6 +186,7 @@
     </Compile>
     <Compile Include="Models\AchievementEvaluation.cs" />
     <Compile Include="Models\AchievementVM.cs" />
+    <Compile Include="Models\ScheduleService.cs" />
     <Compile Include="Models\ScheduleVM.cs" />
     <Compile Include="Models\Security.cs" />
     <Compile Include="Models\TrackVM.cs" />

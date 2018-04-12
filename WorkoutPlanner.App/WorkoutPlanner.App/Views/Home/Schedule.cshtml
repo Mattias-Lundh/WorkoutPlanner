@@ -10,7 +10,8 @@
 @using (Html.BeginForm("SaveSession", "Home", FormMethod.Post))
 {
     <div>Date: </div>
-    <input type="date" name="date"/>
+    <input type="date" name="date" />
+
     <br />
     <div>Track: </div>
     <select name="trackId">
@@ -21,18 +22,65 @@
     </select>
     @:<input type="submit" value="Save Session" />
 }
+<br />
+
+@using (Html.BeginForm("AutomaticSchedule", "Home", FormMethod.Post))
+{
+    @Html.Label("", "Make it for me: ");
+    <input type="submit" value="Yes please"/>
+}
+
+<br />
 <h3 id="dispaly">Planned Activities</h3>
 
 @foreach (var session in Model.ScheduleItems)
 {
-    <div><b>Date:</b> @session.Date.ToString("yyyy-MM-dd") <b>Track:</b> @session.Track.Name <b>Distance:</b> @Math.Truncate((decimal)session.Track.Meters / 1000) KM</div>
-}
+    using (Html.BeginForm("RemoveSession", "Home", FormMethod.Post))
+    {
+        <div>
+            <b>Date:</b> @session.Date.ToString("yyyy-MM-dd") <b>Track:</b> @session.Track.Name <b>Distance:</b> @Math.Truncate((decimal)session.Track.Meters / 1000) KM
+            <input type="hidden" name="sessionId" value="@session.Id" />
+            <input type="submit" value="X" />
+
+        </div>
+        }
+
+    }
 
 <script>
-    window.onload = function () {
+        window.onload = function () {
         @if (null != Session["Username"])
-        {
-            @:document.getElementById("dispaly").textContent = "@Session["Username"]'s Planned Activities";
+            {
+                @:document.getElementById("dispaly").textContent = "@Session["Username"]'s Planned Activities";
+            }
         }
-    }
 </script>
+
+
+
+
+@*@model WorkoutPlanner.App.Models.BaseSessionModel
+
+    @using (Html.BeginForm("Schedule", "Home", FormMethod.Post, htmlAttributes: new { @class = "form-horizontal" }))
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <div class="form-group">
+            <div class="input-group date" data-provide="datepicker">
+
+                @Html.LabelFor(model => model.Date, htmlAttributes: new { @class = "control-label" })
+                @Html.TextBoxFor(model => model.Date, "{0:MM/dd/yyyy}", new { @class = "form-control default-date-picker" })
+                @Html.ValidationMessageFor(model => model.Date, "", new { @class = "text-danger" })
+                <div class="form-group">
+
+
+                    @Html.LabelFor(model => model.Id, htmlAttributes: new { @class = "control-label" })
+                    @Html.TextBoxFor(model => model.Id, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Id, "", new { @class = "text-danger" })
+
+                </div>
+                <input type="submit" value="GO" class="btn btn-default" />
+            </div>
+        </div>
+    }*@

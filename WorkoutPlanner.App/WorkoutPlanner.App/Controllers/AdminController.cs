@@ -18,7 +18,7 @@ namespace WorkoutPlanner.App.Controllers
         {
             Database db = new Database();
             AchievementVM model = new AchievementVM();
-            model.Achievements = db.GetAllAchievements();
+            model.Achievements = db.GetAllAchievemntTypeAndDescription();
             return View(model);
         }
 
@@ -27,8 +27,19 @@ namespace WorkoutPlanner.App.Controllers
             Database db = new Database();
             db.AddAchievement(achievement);
             AchievementVM model = new AchievementVM();
-            model.Achievements = db.GetAllAchievements();
+            model.Achievements = db.GetAllAchievemntTypeAndDescription();
             return View("Index", model);
+        }
+
+        public ActionResult LoadDefaults()
+        {
+            Database db = new Database();
+            if(0 == db.CountAchievements())
+            {
+                db.LoadDefaultAchievementData();
+            }            
+
+            return Redirect("Index");
         }
     }
 }

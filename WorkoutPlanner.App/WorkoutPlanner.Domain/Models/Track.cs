@@ -9,6 +9,12 @@ namespace WorkoutPlanner.Domain.Models
 {
     public class Track
     {
+        public Track()
+        {
+            Comments = new List<Comment>();
+            Locations = new List<Location>();
+        }
+
         public int Id { get; set; }
         [Required]
         public string Name { get; set; }

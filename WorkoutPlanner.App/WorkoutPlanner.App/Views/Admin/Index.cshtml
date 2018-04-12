@@ -19,7 +19,12 @@
     <br />
     <input type="submit" value="Add Achievement" />
 }
-
+<br />
+<br />
+@using (Html.BeginForm("LoadDefaults", "Admin", FormMethod.Post))
+{
+    <input type="submit" value="Load Defaults" />
+}
 <br />
 <br />
 <div>AVALIABLE ACHIEVEMENTS</div>
@@ -27,6 +32,6 @@
 <ul>
     @foreach (var achievement in Model.Achievements)
     {
-        <li><b>Type:</b> @achievement.Type <b>Description:</b> @achievement.Description</li>
-    }
+        <li><b>Type:</b> @achievement.GetType().GetProperty("Type").GetValue(achievement,null) <b>Description:</b> @achievement.GetType().GetProperty("Description").GetValue(achievement, null)</li>
+        }
 </ul>

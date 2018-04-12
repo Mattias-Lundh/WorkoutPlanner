@@ -30,7 +30,6 @@
     }
 
     function DisplayComments(trackName, comments) {
-        alert("here");
         var allComments = "<div>";
         for (var i = 0; i < comments.length; i++) {
             allComments += "<div>*" + comments[i] + "</div><br />";
@@ -134,7 +133,6 @@
 
     window.onload = function () {
         for (var i = 0; i < tracks.length; i++) {
-            alert("this place");
             InsertButton(tracks[i].name, tracks[i].locations, tracks[i].comments);
         }
     }

@@ -10,7 +10,7 @@
 <ul>
     @foreach (var achievement in Model.Achievements)
     {
-        <li><b>Type:</b> @achievement.Type <b>Description:</b> @achievement.Description</li>
+    <li><b>Type:</b> @achievement.GetType().GetProperty("Type").GetValue(achievement, null) <b>Description:</b> @achievement.GetType().GetProperty("Description").GetValue(achievement, null)</li>
     }
 </ul>
 }

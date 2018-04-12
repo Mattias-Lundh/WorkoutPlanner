@@ -2,21 +2,26 @@
 <br />
 <div id="map"></div>
 
-<div id="routeInfo">
-    @Html.Label("0", new { id = "meters" }) Kilometers
-</div>
 <div id="mapControls">
-    <button onclick="Undo()">Undo Marker</button>
 
+    <button onclick="Undo()">Undo Marker</button>
+    <br />
+    <br />
     @using (Html.BeginForm("SaveTrack", "Home", FormMethod.Post))
     {
         <fieldset>
             <legend>New Track</legend>
+            <div id="routeInfo">
+                @Html.Label("0", new { id = "meters" }) Kilometers
+            </div>
             <label>Track Name</label>
             @Html.TextBox("name")
             <br />
             <span id="hidden_locationValues"></span>
             <span id="hidden_distanceValues"></span>
+            @Html.Label("","Comment on track")
+            @Html.TextArea("Text")
+            <br />
             <input type="submit" value="Save Track">
         </fieldset>
     }
