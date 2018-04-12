@@ -277,7 +277,10 @@ namespace WorkoutPlanner.Data
                 return context.Achievements.ToList();
             }
         }
-
+        /// <summary>
+        /// multiple object get
+        /// </summary>
+        /// <returns>a list of objects with properties Type and Description</returns>
         public List<object> GetAllAchievemntTypeAndDescription()
         {
             using (WorkoutPlannerContext context = new WorkoutPlannerContext())
@@ -295,7 +298,7 @@ namespace WorkoutPlanner.Data
         /// multiple object get
         /// </summary>
         /// <param name="userId">user id to be matched</param>
-        /// <returns>a list of achievements</returns>
+        /// <returns>a list of objects with properties Type and Description</returns>
         public List<object> GetAchievementsTypeAndDescriptionByUserId(int userId)
         {
             using (WorkoutPlannerContext context = new WorkoutPlannerContext())
